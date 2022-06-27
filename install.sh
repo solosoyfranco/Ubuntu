@@ -155,3 +155,27 @@ sudo apt install notion-app-enhanced
 
 
 sudo apt-get install gnome-shell-pomodoro
+https://extensions.gnome.org/extension/805/hide-dash/
+https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
+https://extensions.gnome.org/extension/1723/wintile-windows-10-window-tiling-for-gnome/
+https://extensions.gnome.org/extension/4325/hide-activities-button/
+https://extensions.gnome.org/extension/1460/vitals/
+https://extensions.gnome.org/extension/277/impatience/
+https://extensions.gnome.org/extension/2/move-clock/
+https://extensions.gnome.org/extension/708/panel-osd/
+https://extensions.gnome.org/extension/3843/just-perfection/
+https://extensions.gnome.org/extension/8/places-status-indicator/
+https://extensions.gnome.org/extension/905/refresh-wifi-connections/
+https://extensions.gnome.org/extension/355/status-area-horizontal-spacing/
+#https://extensions.gnome.org/extension/945/cpu-power-manager/
+https://extensions.gnome.org/extension/570/todotxt/
+https://extensions.gnome.org/extension/770/force-quit/
+https://extensions.gnome.org/extension/3193/blur-my-shell/
+#https://extensions.gnome.org/extension/4158/gnome-40-ui-improvements/
+https://extensions.gnome.org/extension/3730/floating-dock/
+https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
+https://extensions.gnome.org/extension/800/remove-dropdown-arrows/
+https://extensions.gnome.org/extension/1034/services-systemd/
+https://extensions.gnome.org/extension/120/system-monitor/
+https://extensions.gnome.org/extension/1080/transparent-notification/
+https://extensions.gnome.org/extension/302/windowoverlay-icons/
