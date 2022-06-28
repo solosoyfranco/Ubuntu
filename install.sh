@@ -1,5 +1,5 @@
 #!/bin/bash
-# fedora-scripts
+# Ubuntu-scripts
 # This is free software, and you are welcome to redistribute it
 # under certain conditions
 # Licensed under GPLv3 License
@@ -15,17 +15,17 @@ MENU="Please choose one of the following options:"
 
 
 #Check to see if Dialog is installed, if not install it
-if [ $(deb -q dialog 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
-sudo apt install -y dialog
-fi
+#if [ $(deb -q dialog 2>/dev/null | grep -c "is not installed") -eq 1 ]; then
+#sudo apt install -y dialog
+#fi
 
 OPTIONS=(1  "System Update"
-         2  "Enable Flatpak, Tweaks, Media Codecs, Extensions & Extras"
+         2  "Enable Tweaks, Media Codecs, Extensions & Extras"
          3  "Swappiness - 10"
          4  "Appearance Tweaks - Flat GTK and Icon Theme"
          5  "Install Nvidia Drivers"
          6  "Install KVM virtualization software"
-         7  "Enable Better Fonts - Better font rendering"
+         7  "Enable gnome extensions"
          8  "Install Common Software - Installs a bunch of my most used software"
          9  "Install DisplayLink Dock (d3100)"
          10 "Install Oh-My-ZSH w pl10k"
@@ -46,17 +46,18 @@ while [ "$CHOICE -ne 4" ]; do
     case $CHOICE in
         1)
             echo "System Update"
-            sudo apt update && sudo apt upgrade
+            sudo apt update -y 
+            sudo apt upgrade -y 
             sudo apt autoremove
             notify-send "Option 1 - system update" --expire-time=10
             ;;
         2)
-            echo "Enable Flatpak, Tweaks, Media Codecs, Extensions & Extras"
+            echo "Enable Tweaks, Media Codecs, Extensions & Extras"
             ##\
-            sudo apt update
-            sudo apt install -y gnome-shell-extensions gnome-tweaks snapd flatpak gnome-software-plugin-flatpak ubuntu-restricted-extras libdvd-pkg ubuntu-restricted-addons synaptic git curl wget gnome-shell-extension-appindicator blueman neofetch apt-transport-https p7zip p7zip-full unzip rar unrar p7zip-rar gparted clang cmake ubuntu-cleaner tree htop gnome-sushi gpg
+            sudo apt update -y
+            sudo apt install -y gnome-shell-extensions gnome-tweaks snapd ubuntu-restricted-extras libdvd-pkg ubuntu-restricted-addons synaptic git curl wget gnome-shell-extension-appindicator blueman neofetch apt-transport-https p7zip p7zip-full unzip rar unrar p7zip-rar gparted clang cmake tree htop gnome-sushi gpg
+            sudo dpkg-reconfigure libdvd-pkg
             sudo snap install btop
-            sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             notify-send "Option 2 - tweaks" --expire-time=10
             ;;
         3)  echo "Swappiness - 10"
@@ -68,20 +69,47 @@ while [ "$CHOICE -ne 4" ]; do
             notify-send "Option 3 - Swappiness - 10"--expire-time=10
             ;;
         4)  echo "Appearance Tweaks - Flat GTK and Icon Theme"
-            sudo add-apt-repository ppa:daniruiz/flat-remix
-            sudo apt install -y gnome-shell-extension-user-theme flat-remix-gtk flat-remix paper-icon-theme flat-remix-icon-theme flat-remix-theme 
-            gnome-extensions install user-theme@gnome-shell-extensions.gcampax.github.com
+            #required by gnome extensions
+            sudo apt install -y gnome-tweaks gnome-shell-extensions chrome-gnome-shell
+            #required by extension installer
+            sudo apt install -y curl dbus perl git less
+            #extension installer by cmd line
+            #source: https://github.com/brunelli/gnome-shell-extension-installer
+            wget -O gnome-shell-extension-installer "https://github.com/brunelli/gnome-shell-extension-installer/raw/master/gnome-shell-extension-installer"
+            chmod +x gnome-shell-extension-installer
+            sudo mv gnome-shell-extension-installer /usr/bin/
+            gnome-shell-extension-installer 19 #user-themes
+            #install flat-remix
+            sudo add-apt-repository ppa:daniruiz/flat-remix -y 
+            sudo apt install -y flat-remix-gtk flat-remix paper-icon-theme flat-remix-gnome
+            #------------------------------------------------#
+            # search for settings:
+            # gsettings list-schemas 
+            # gsettings list-keys org.gnome.desktop.interface
+            #-------------------------------------------------#
             gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
+            #shell or panel mod
+            gsettings set org.gnome.shell.extensions.user-theme name "Flat-Remix-Blue-Darkest-fullPanel"
+            #legacy application
             gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue-Dark-Solid"
-            gsettings set org.gnome.desktop.wm.preferences theme "Flat-Remix-Blue"
-            gsettings set org.gnome.desktop.interface icon-theme 'Flat-Remix-Blue'
-            gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
-            gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+            #icon set
+            gsettings set org.gnome.desktop.interface icon-theme "Flat-Remix-Blue-Dark"
+            #cursor set
+            gsettings set org.gnome.desktop.interface cursor-theme "Paper"
+            #minimize when click on dock
+            gsettings set org.gnome.shell.extensions.dash-to-dock click-action "minimize"
+            #battery percentage
+            gsettings set org.gnome.desktop.interface show-battery-percentage true
+            #Fonts
+            gsettings set org.gnome.desktop.interface monospace-font-name "Andale Mono Bold 13"
+            gsettings set org.gnome.desktop.interface document-font-name "Garuda Regular 12"
+            gsettings set org.gnome.desktop.interface font-name "Garuda Regular 12" 
+            gsettings set org.gnome.desktop.wm.preferences titlebar-font "Garuda Regular 12"
             notify-send "Option 4 - There you go, that's better" --expire-time=10
             ;;
         5)  echo "Nvidia drivers"
             modinfo -F version nvidia
-            sudo add-apt-repository ppa:graphics-drivers/ppa
+            sudo add-apt-repository ppa:graphics-drivers/ppa -y 
             sudo apt update -y # and reboot if you are not on the latest kernel
             sudo ubuntu-drivers autoinstall
             ubuntu-drivers devices
@@ -93,16 +121,44 @@ while [ "$CHOICE -ne 4" ]; do
             sudo systemctl enable --now libvirtd
             notify-send "Option 6 - fKVM installed" --expire-time=10            
             ;;
-        7)  echo "Enabling Better Fonts"
-            ## need to work on this
-            # sudo -s apt -y copr enable dawid/better_fonts
-            # sudo -s apt install -y fontconfig-font-replacements
-            # sudo -s apt install -y fontconfig-enhanced-defaults
-            notify-send "Option 7 - Fonts prettified - enjoy!" --expire-time=10
+        7)  echo "Gnome Extensions"
+            #install and set the extensions
+            #required by gnome extensions
+            sudo apt install -y gnome-tweaks gnome-shell-extensions chrome-gnome-shell
+            #required by extension installer
+            sudo apt install -y curl dbus perl git less
+            #extension installer by cmd line
+            #source: https://github.com/brunelli/gnome-shell-extension-installer
+            wget -O gnome-shell-extension-installer "https://github.com/brunelli/gnome-shell-extension-installer/raw/master/gnome-shell-extension-installer"
+            chmod +x gnome-shell-extension-installer
+            sudo mv gnome-shell-extension-installer /usr/bin/
+            ### install
+            gnome-shell-extension-installer 779 --yes #clipboard indicator
+            gnome-shell-extension-installer 1262 --yes #bing wallpaper
+            gnome-shell-extension-installer 517 --yes #caffeine
+            gnome-shell-extension-installer 906 --yes #sound output device chooser
+            gnome-shell-extension-installer 1401 --yes #bluetooth quick connect
+            gnome-shell-extension-installer 4225 --yes #gesture-improvements
+            gnome-shell-extension-installer 3780 --yes #ddterm
+            gnome-shell-extension-installer 2741 --yes #remove alttabdelay
+            gnome-shell-extension-installer 1723 --yes #wintile win10 for gnome
+            gnome-shell-extension-installer 1460 --yes #vitals
+            gnome-shell-extension-installer 277 --yes #impatience
+            gnome-shell-extension-installer 2 --yes #move clock
+            gnome-shell-extension-installer 3843 --yes #just perfection
+            gnome-shell-extension-installer 905 --yes #refresh wifi connections
+            gnome-shell-extension-installer 945 --yes #cpu power manager
+            gnome-shell-extension-installer 570 --yes #TODO list
+            gnome-shell-extension-installer 1034 --yes #services systemd
+            gnome-shell-extension-installer 302 --yes #windowoverlay icons
+
+            ###activate
+            gnome-extensions enable clipboard-indicator@tudmotu.com 
+
+            notify-send "Option 7 - Ubuntu prettified - enjoy!" --expire-time=10
             ;;
         8)  echo "Installing Software"
             #necessary software
-            sudo flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             sudo apt install -y apt-transport-https git gpg curl wget fonts-noto libxss1 libindicator7 ttf-mscorefonts-installer
             #notion repo
             echo "deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /" | sudo tee /etc/apt/sources.list.d/notion-repackaged.list
@@ -123,8 +179,10 @@ while [ "$CHOICE -ne 4" ]; do
             curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
             sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
             #remmina repo
-            sudo apt-add-repository ppa:remmina-ppa-team/remmina-next
-            
+            sudo apt-add-repository -y ppa:remmina-ppa-team/remmina-next
+            #install flatpak and repo
+            sudo apt install -y flatpak
+            flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             #install discord
             sudo flatpak install -y flathub com.discordapp.Discord
             #spotify 
