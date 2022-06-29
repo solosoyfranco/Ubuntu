@@ -64,6 +64,7 @@ Copy and paste this commands to your terminal:
 * Firmware
 * QR Decoder
 * Bluetooth Manager
+* Libreoffice
 
 
 

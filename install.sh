@@ -103,7 +103,7 @@ while [ "$CHOICE -ne 4" ]; do
             #Fonts
             gsettings set org.gnome.desktop.interface monospace-font-name "Andale Mono Bold 13"
             gsettings set org.gnome.desktop.interface document-font-name "Garuda Regular 12"
-            gsettings set org.gnome.desktop.interface font-name "Garuda Regular 12" 
+            gsettings set org.gnome.desktop.interface font-name "Garuda Regular 11" 
             gsettings set org.gnome.desktop.wm.preferences titlebar-font "Garuda Regular 12"
             notify-send "Option 4 - There you go, that's better" --expire-time=10
             ;;
@@ -158,8 +158,8 @@ while [ "$CHOICE -ne 4" ]; do
             notify-send "Option 7 - Ubuntu prettified - enjoy!" --expire-time=10
             ;;
         8)  echo "Installing Software"
-            #necessary software
-            sudo apt install -y apt-transport-https git gpg curl wget fonts-noto libxss1 libindicator7 ttf-mscorefonts-installer
+            #necessary software 
+            sudo apt install -y apt-transport-https git gpg curl wget fonts-noto libxss1 libindicator7 ttf-mscorefonts-installer libreoffice 
             #notion repo
             echo "deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /" | sudo tee /etc/apt/sources.list.d/notion-repackaged.list
             #VSC repo
@@ -184,43 +184,43 @@ while [ "$CHOICE -ne 4" ]; do
             sudo apt install -y flatpak
             flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
             #install discord
-            sudo flatpak install -y flathub com.discordapp.Discord
+            flatpak install -y flathub com.discordapp.Discord
             #spotify 
-            sudo flatpak install -y flathub com.spotify.Client
+            flatpak install -y flathub com.spotify.Client
             #Gimp
-            sudo flatpak install -y flathub org.gimp.GIMP
+            flatpak install -y flathub org.gimp.GIMP
             #network displays
-            sudo flatpak install -y flathub org.gnome.NetworkDisplays
+            flatpak install -y flathub org.gnome.NetworkDisplays
             #evolution email
-            sudo flatpak install -y flathub org.gnome.Evolution
+            flatpak install -y flathub org.gnome.Evolution
             #inkscape
-            sudo flatpak install -y flathub org.inkscape.Inkscape
+            flatpak install -y flathub org.inkscape.Inkscape
             #Whatsapp
-            sudo flatpak install -y flathub com.rtosta.zapzap
+            flatpak install -y flathub com.rtosta.zapzap
             #Filezilla
-            sudo flatpak install -y flathub org.filezillaproject.Filezilla
+            flatpak install -y flathub org.filezillaproject.Filezilla
             #parsec
-            sudo flatpak install -y flathub com.parsecgaming.parsec
+            flatpak install -y flathub com.parsecgaming.parsec
             #qbittorrent
-            sudo flatpak install -y flathub org.qbittorrent.qBittorrent
+            flatpak install -y flathub org.qbittorrent.qBittorrent
             #thunderbild mail
-            sudo flatpak install -y flathub org.mozilla.Thunderbird
+            flatpak install -y flathub org.mozilla.Thunderbird
             # Disk analyzer
-            sudo flatpak install -y flathub org.gnome.baobab
+            flatpak install -y flathub org.gnome.baobab
             # Atom
-            sudo flatpak install -y flathub io.atom.Atom
+            flatpak install -y flathub io.atom.Atom
             #Pycharm pro
-            sudo flatpak install -y flathub com.jetbrains.PyCharm-Professional
+            flatpak install -y flathub com.jetbrains.PyCharm-Professional
             # SQL client 
-            sudo flatpak install -y flathub com.github.alecaddd.sequeler
+            flatpak install -y flathub com.github.alecaddd.sequeler
             # Firmware
-            sudo flatpak install -y flathub org.gnome.Firmware
+            flatpak install -y flathub org.gnome.Firmware
             # Decoder 
-            sudo flatpak install -y flathub com.belmoussaoui.Decoder
+            flatpak install -y flathub com.belmoussaoui.Decoder
             #ultimaker cura 
-            sudo flatpak install -y flathub com.ultimaker.cura
+            flatpak install -y flathub com.ultimaker.cura
             #barrier
-            sudo flatpak install -y flathub com.github.debauchee.barrier
+            flatpak install -y flathub com.github.debauchee.barrier
 
             #Teamviewer
             wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb && sudo apt install -y ./teamviewer_amd64.deb
@@ -262,3 +262,17 @@ while [ "$CHOICE -ne 4" ]; do
           ;;
     esac
 done
+
+
+sudo add-apt-repository -y ppa:touchegg/stable
+sudo apt install touchegg
+systemctl status touchegg.service
+
+
+#vpn remove
+sudo apt remove --purge xl2tpd
+sudo apt autoremove
+
+apt remove xl2tpd
+add-apt-repository ppa:racb/fixes
+apt install xl2tpd network-manager-l2tp-gnome
